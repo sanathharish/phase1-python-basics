@@ -27,3 +27,32 @@ def standerdize_column_names(df: pd.DataFrame, inplace: bool = True) -> pd.DataF
         new_df = df.copy()
         new_df.columns = cols
         return new_df
+
+def normalize_text_columns(df, case='title', exclude_cols=None):
+    """
+    Normalizes capitalization across all object/category columns.
+    Args:
+        df: DataFrame
+        case: 'lower', 'upper', or 'title'
+        exclude_cols: list of columns to skip (optional)
+    Returns:
+        DataFrame with consistent text formatting
+    """
+
+    df = df.copy()
+    exclude_cols = exclude_cols or []
+
+    for col in df.select_dtypes(include=['object', 'category']).columns:
+        if col in exclude_cols:
+            continue
+
+        if case == 'lower':
+            df[col] = df[col].astype(str).str.strip().str.lower()
+        elif case == 'upper':
+            df[col] = df[col].astype(str).str.strip().str.upper()
+        elif case == 'title':
+            df[col] = df[col].astype(str).str.strip().str.title()
+        else:
+            raise ValueError("Invalid case argument: choose from ['lower', 'upper', 'title']")
+
+    return df
