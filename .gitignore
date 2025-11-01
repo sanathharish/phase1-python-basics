@@ -3,4 +3,5 @@ __pycache__/
 *.csv
 *.xslx
 *.log
+*.txt
 .env
